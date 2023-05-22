@@ -36,6 +36,12 @@ int main(int argc, char const *argv[])
 	clear_scr();
 	goto_xy(0, 0);
 	printf("Game over! Score: %i", snk.len);
+
+	// prevent exiting too quickly after ending
+
+	Sleep(1111);
+	
+	// wait for keystroke
 	getch();
 	return 0;
 }
