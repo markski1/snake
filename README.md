@@ -8,7 +8,7 @@ While there is no shortage of examples for how to write Snake in C on the intern
 
 The main way it stands on it's own is having a separate thread for input handling, which avoids the annoying delay between inputs found in other "basic" implementations.
 
-![Screenshot](https://github.com/markski1/snake/assets/22557859/5b57a424-0124-4a1f-bd09-a3dab60feef6)
+![Screenshot](https://github.com/markski1/snepk/assets/22557859/6886941a-4433-4e59-9654-9773e7c22a94)
 
 Usage: Control with WASD. Exit with 'o'.
 
