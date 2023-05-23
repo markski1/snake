@@ -1,3 +1,9 @@
+// "escape" onto the given X and Y characters of the console.
+void goto_xy(int x, int y)
+{
+    printf("%c[%i;%iH", CHAR_ESC, y, x);
+}
+
 // fill the screen space with void.
 void clear_scr() {
 	int i, j;

@@ -13,6 +13,8 @@ struct Snake {
 	int     len;       // length
 };
 
+#define BASE_WAIT   125
+
 #define KEY_UP      72
 #define KEY_LEFT    75
 #define KEY_RIGHT   77

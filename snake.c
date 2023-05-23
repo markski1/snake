@@ -5,17 +5,27 @@
 #include <pthread.h>
 
 #include "structures.h"
+
 // globals
 snake  snk;
 coords food;
 bool   game_over;
 
-#include "platform.h"
-#include "screen.h"
+#ifdef _WIN32
+#include "platform_specific/win-platform.h"
+#else
+#include "platform_specific/lin-platform.h"
+#endif
+
+#include "system/screen.h"
+#include "system/keyboard.h"
+
 #include "game_state.h"
 
 void main(int argc, char const *argv[])
 {
+	clear_scr();
+
 	// set the random number generator's seed to the current time
 	time_t t;
 	srand((unsigned) time(&t));
@@ -23,7 +33,9 @@ void main(int argc, char const *argv[])
 	// set the screensize
 	set_scrsize();
 
-	printf("SNEPK!\nPress any key to start.");
+	goto_xy(0, 0);
+	printf("SNEPK!\n\nPress any key to start.\n\nIf running from a terminal, please ensure\nyou have at least %i lines of height.", GAME_HEIGHT);
+
 	getch();
 
 	pthread_t keyboard_thread;
@@ -38,7 +50,6 @@ void main(int argc, char const *argv[])
 		// game loop
 		while (!game_over) {
 			logic_run();
-			wait_and_key();
 		}
 
 		clear_scr();
@@ -46,6 +57,6 @@ void main(int argc, char const *argv[])
 		printf("Game over! Score: %i\n\n", snk.len - SNAKE_INITIAL_LENGTH);
 		printf("Restarting in 3 seconds..");
 
-		Sleep(3000);
+		ms_sleep(3000);
 	}
 }

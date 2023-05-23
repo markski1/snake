@@ -1,6 +1,7 @@
 bool snake_state_invalid();
 void spawn_new_food();
 void draw_snake();
+void logic_wait();
 
 void setup_state()
 {
@@ -15,6 +16,8 @@ void setup_state()
 
 	spawn_new_food();
 }
+
+int count = 0;
 
 // every "frame", if you will.
 void logic_run()
@@ -56,6 +59,11 @@ void logic_run()
 		spawn_new_food();
 		update_score();
 	}
+
+	// move cursor out of the way
+	goto_xy(GAME_WIDTH + 15, GAME_HEIGHT);
+
+	logic_wait();
 }
 
 bool snake_state_invalid()
@@ -155,4 +163,21 @@ void draw_snake() {
 	// erase the tail-end of our snake
 	goto_xy(snk.prev[snk.len].x, snk.prev[snk.len].y);
 	printf(" ");
+}
+
+// wait a given amount of time, less as the snake becomes longer,
+// and check for keyboard input afterwards. update the snake's behaviour if required.
+void logic_wait()
+{
+	long wait_amount = BASE_WAIT - (snk.len * 2);
+
+    // if moving vertically slow things down, since vertical characters are higher
+    if (snk.dir == MOVE_UP || snk.dir == MOVE_DOWN)
+        wait_amount *= 1.3;
+
+    if (wait_amount < 32) wait_amount == 32;
+    else if (wait_amount < 50) wait_amount * 1.07;
+    else if (wait_amount < 75) wait_amount * 1.15;
+    
+	msleep(wait_amount);
 }
