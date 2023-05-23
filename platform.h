@@ -23,13 +23,25 @@ void wait_and_key()
     if (snk.dir == MOVE_UP || snk.dir == MOVE_DOWN)
         wait_amount *= 1.3;
 
-    if (wait_amount < 25) wait_amount == 25;
-
+    if (wait_amount < 32) wait_amount == 32;
+    else if (wait_amount < 50) wait_amount * 1.07;
+    else if (wait_amount < 75) wait_amount * 1.15;
+    
 	Sleep(wait_amount);
+}
 
-    if (kbhit())
-    {
-        switch (getch())
+// "escape" onto the given X and Y characters of the console.
+void goto_xy(int x, int y)
+{
+    printf("%c[%i;%iH", CHAR_ESC, y, x);
+}
+
+// runs on it's own thread
+void * handle_keystrokes(void *ptr) {
+    while (true) {
+        char input = getch();
+
+        switch (input)
         {
             // on each key, make sure we're not moving the opposite direction.
             // snake can't do a 180 into itself.
@@ -53,11 +65,10 @@ void wait_and_key()
             case CHAR_ESC:
                 game_over = true;
         }
-    }
-}
 
-// "escape" onto the given X and Y characters of the console.
-void goto_xy(int x, int y)
-{
-    printf("%c[%i;%iH", CHAR_ESC, y, x);
+        // quick sleep this thread to avoid illegal states if keys are switched too fast
+        int wait_amount = BASE_WAIT - (snk.len * 2);
+        if (wait_amount < 30) wait_amount = 30;
+        Sleep(wait_amount / 2);
+    }
 }

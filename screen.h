@@ -18,6 +18,10 @@ void update_score()
 
 void create_game_field()
 {
+	// hide cursor
+	printf("\e[?25l");
+
+	// set field color as BLUE
 	printf(ANSI_COLOR_BLUE);
 	clear_scr();
 	int i, j;
@@ -39,6 +43,7 @@ void create_game_field()
 		printf("|");
 	}
 
+	// reset color to console default
 	printf(ANSI_COLOR_RESET);
 
 	// and off to the right, a score counter.

@@ -56,9 +56,6 @@ void logic_run()
 		spawn_new_food();
 		update_score();
 	}
-
-	// move the cursor off the screen
-	goto_xy(0, 0);
 }
 
 bool snake_state_invalid()
@@ -74,7 +71,7 @@ bool snake_state_invalid()
 	}
 
 	// check collision on self
-	for (int i = snk.len; i >= 0; --i)
+	for (int i = snk.len - 1; i >= 0; --i)
 	{
 		if (snk.pos.x == snk.prev[i].x && snk.pos.y == snk.prev[i].y)
 			return true;
@@ -133,9 +130,27 @@ void draw_snake() {
 		snk.prev[i].y = snk.prev[i-1].y;
 	}
 
-	// draw the head of the snake
-	goto_xy(snk.pos.x, snk.pos.y);
+	// draw the prevous head of the snake as the body
+	goto_xy(snk.prev[0].x, snk.prev[0].y);
 	printf(ANSI_COLOR_GREEN "@" ANSI_COLOR_RESET);
+
+	// draw the new head of the snake
+	goto_xy(snk.pos.x, snk.pos.y);
+	switch (snk.dir)
+	{
+		case MOVE_UP:
+			printf(ANSI_COLOR_GREEN "^" ANSI_COLOR_RESET);
+			break;
+		case MOVE_DOWN:
+			printf(ANSI_COLOR_GREEN "v" ANSI_COLOR_RESET);
+			break;
+		case MOVE_LEFT:
+			printf(ANSI_COLOR_GREEN "<" ANSI_COLOR_RESET);
+			break;
+		case MOVE_RIGHT:
+			printf(ANSI_COLOR_GREEN ">" ANSI_COLOR_RESET);
+			break;
+	}
 
 	// erase the tail-end of our snake
 	goto_xy(snk.prev[snk.len].x, snk.prev[snk.len].y);
