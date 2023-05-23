@@ -9,7 +9,8 @@
 // globals
 snake  snk;
 coords food;
-bool   game_over;
+bool   game_over = false;
+bool   keystroke_unread = false;
 
 #ifdef _WIN32
 #include "platform_specific/win-platform.h"
@@ -46,6 +47,7 @@ void main(int argc, char const *argv[])
 		create_game_field();
 		setup_state();
 		game_over = false;
+		keystroke_unread = false;
 
 		// game loop
 		while (!game_over) {

@@ -1,5 +1,5 @@
 // all the code here is Windows specific
-#include <windows.h>
+#include <synchapi.h>
 #include <conio.h>
 
 void set_scrsize() {
@@ -7,7 +7,7 @@ void set_scrsize() {
     sprintf(str, "mode %i, %i", GAME_WIDTH + 15, GAME_HEIGHT);
     system(str);
 
-    SetConsoleTitle("SNEPK!");
+    printf("\033]0; SNEPK! \007");
 }
 
 // wait a given amount of time, less as the snake becomes longer,

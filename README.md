@@ -10,7 +10,7 @@ The main way it stands on it's own is having a separate thread for input handlin
 
 ![Screenshot](https://github.com/markski1/snake/assets/22557859/5b57a424-0124-4a1f-bd09-a3dab60feef6)
 
-Usage: Control with WASD. Exit with ESC.
+Usage: Control with WASD. Exit with 'o'.
 
 ### Windows:
 Builds and works perfectly.

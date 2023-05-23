@@ -8,12 +8,13 @@ struct Coords {
 
 struct Snake {
 	coords  pos;       // position
-	coords  prev[256]; // previous positions
+	coords  prev[128]; // previous positions
 	int     dir;       // direction
 	int     len;       // length
+	int     spe;       // speed
 };
 
-#define BASE_WAIT   125
+#define BASE_WAIT   111
 
 #define KEY_UP      72
 #define KEY_LEFT    75
@@ -25,8 +26,8 @@ struct Snake {
 #define MOVE_LEFT   3
 #define MOVE_RIGHT  4
 
-#define GAME_WIDTH  50
-#define GAME_HEIGHT 25
+#define GAME_WIDTH  40
+#define GAME_HEIGHT 20
 
 #define CHAR_ESC    27
 

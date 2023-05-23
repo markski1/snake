@@ -10,7 +10,14 @@ void setup_state()
 	snk.pos.x = (rand() % (GAME_WIDTH  / 2)) + 2;
 	snk.pos.y = (rand() % (GAME_HEIGHT - 1)) + 3;
 	snk.len = SNAKE_INITIAL_LENGTH;
+	snk.spe = 1;
 	snk.dir = MOVE_RIGHT;
+
+	// move the first couple previous location coords outside the screen
+	for (int i = 0; i <= SNAKE_INITIAL_LENGTH; ++i) {
+		snk.prev[i].x = GAME_WIDTH + 20;
+		snk.prev[i].y = GAME_HEIGHT;
+	}
 
 	update_score();
 
@@ -42,6 +49,8 @@ void logic_run()
 			snk.pos.x += 1;
 			break;
 	}
+	
+	keystroke_unread = false;
 
 	draw_snake();
 
@@ -56,6 +65,9 @@ void logic_run()
 	if (food.x == snk.pos.x && food.y == snk.pos.y)
 	{
 		snk.len++;
+		if (snk.len < 15) snk.spe += 2;
+		else if (snk.len < 30) snk.spe += 1;
+		else snk.spe += rand() % 2;
 		spawn_new_food();
 		update_score();
 	}
@@ -142,6 +154,10 @@ void draw_snake() {
 	goto_xy(snk.prev[0].x, snk.prev[0].y);
 	printf(ANSI_COLOR_GREEN "@" ANSI_COLOR_RESET);
 
+	// erase the tail-end of our snake
+	goto_xy(snk.prev[snk.len].x, snk.prev[snk.len].y);
+	printf(" ");
+
 	// draw the new head of the snake
 	goto_xy(snk.pos.x, snk.pos.y);
 	switch (snk.dir)
@@ -159,25 +175,18 @@ void draw_snake() {
 			printf(ANSI_COLOR_GREEN ">" ANSI_COLOR_RESET);
 			break;
 	}
-
-	// erase the tail-end of our snake
-	goto_xy(snk.prev[snk.len].x, snk.prev[snk.len].y);
-	printf(" ");
 }
 
 // wait a given amount of time, less as the snake becomes longer,
 // and check for keyboard input afterwards. update the snake's behaviour if required.
 void logic_wait()
 {
-	long wait_amount = BASE_WAIT - (snk.len * 2);
+	// wait reduced by the snake's speed.
+	long wait_amount = BASE_WAIT - snk.spe;
 
     // if moving vertically slow things down, since vertical characters are higher
     if (snk.dir == MOVE_UP || snk.dir == MOVE_DOWN)
-        wait_amount *= 1.3;
+        wait_amount *= 1.4;
 
-    if (wait_amount < 32) wait_amount == 32;
-    else if (wait_amount < 50) wait_amount * 1.07;
-    else if (wait_amount < 75) wait_amount * 1.15;
-    
-	msleep(wait_amount);
+	ms_sleep(wait_amount);
 }
