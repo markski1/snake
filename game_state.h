@@ -2,11 +2,11 @@ bool snake_state_invalid();
 void spawn_new_food();
 void draw_snake();
 void logic_wait();
+void wall_check();
 
 void setup_state()
 {
 	// Spawn the snake in a random location on the left side of the playing field.
-	// The snake will spawn at a length of SNAKE_INITIAL_LENGTH, moving to the right.
 	snk.pos.x = (rand() % (GAME_WIDTH  / 2)) + 2;
 	snk.pos.y = (rand() % (GAME_HEIGHT - 1)) + 3;
 	snk.len = SNAKE_INITIAL_LENGTH;
@@ -52,6 +52,8 @@ void logic_run()
 	
 	keystroke_unread = false;
 
+	wall_check();
+
 	draw_snake();
 
 	// if we've moved out of bounds, or ran into ourselves, game over.
@@ -80,16 +82,6 @@ void logic_run()
 
 bool snake_state_invalid()
 {
-	// check we're not outside the bounds.
-	if (snk.pos.x <= 1 || snk.pos.y <= 1)
-	{
-		return true;
-	}
-	if (snk.pos.x >= GAME_WIDTH || snk.pos.y >= GAME_HEIGHT)
-	{
-		return true;
-	}
-
 	// check collision on self
 	for (int i = snk.len - 1; i >= 0; --i)
 	{
@@ -138,6 +130,21 @@ void spawn_new_food()
 	// draw the food
 	goto_xy(food.x, food.y);
 	printf(ANSI_COLOR_YELLOW "#" ANSI_COLOR_RESET);
+}
+
+void wall_check() {
+	// if the snake pos runs into a wall, move it to the other end.
+	if (snk.pos.x <= 1)
+		snk.pos.x = GAME_WIDTH - 1;
+
+	if (snk.pos.x >= GAME_WIDTH)
+		snk.pos.x = 2;
+
+	if (snk.pos.y <= 1)
+		snk.pos.y = GAME_HEIGHT - 1;
+
+	if (snk.pos.y >= GAME_HEIGHT)
+		snk.pos.y = 2;
 }
 
 void draw_snake() {
