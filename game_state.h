@@ -59,7 +59,7 @@ void logic_run()
 		}
 
 		movement_buffer[KB_BFR_SIZE - 1] = MOVE_NONE;
-    }
+	}
 
 	// move in whichever direction it is we're moving
 	switch (snk.dir)
@@ -216,9 +216,9 @@ void logic_wait()
 	// wait reduced by the snake's speed.
 	long wait_amount = BASE_WAIT - snk.spe;
 
-    // if moving vertically slow things down, since vertical characters are higher
-    if (snk.dir == MOVE_UP || snk.dir == MOVE_DOWN)
-        wait_amount *= 1.35;
+	// if moving vertically slow things down, since vertical characters are higher
+	if (snk.dir == MOVE_UP || snk.dir == MOVE_DOWN)
+		wait_amount *= 1.35;
 
 	ms_sleep(wait_amount);
 }

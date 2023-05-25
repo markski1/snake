@@ -7,10 +7,10 @@
 #include "structures.h"
 
 // globals
-snake  snk;
-coords food;
-bool   game_over = false;
-int    movement_buffer[KB_BFR_SIZE];
+snake   snk;
+coords  food;
+bool    game_over = false;
+int     movement_buffer[KB_BFR_SIZE];
 
 #ifdef _WIN32
 #include "platform_specific/win-platform.h"
