@@ -1,5 +1,9 @@
-#define BASE_WAIT   111
+#define BASE_WAIT   100
 
+
+#define KB_BFR_SIZE 3
+
+#define MOVE_NONE   0
 #define MOVE_UP     1
 #define MOVE_DOWN   2
 #define MOVE_LEFT   3

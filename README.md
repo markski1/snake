@@ -11,7 +11,7 @@ My objectives for it:
 - [x] Code must be no more than 512 lines
 - [x] Game must weight no more than 32 kb
 - [x] Must use no more than 1 Mb of RAM during runtime (not counting the terminal application's memory usage).
-- [x] Don't have a one-frame delay for keyboard inputs (solved by having a separate thread for it)
+- [x] Have good movement. Snake C implementations will sometimes have a delay on inputs, or miss inputs in quick sucession.
 - [ ] Work on both Windows and Linux (Failure explained below)
 
 ![Screenshot](https://github.com/markski1/snepk/assets/22557859/6886941a-4433-4e59-9654-9773e7c22a94)

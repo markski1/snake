@@ -5,9 +5,9 @@ int msleep(long msec);
 char getch();
 
 void set_scrsize() {
-    // no resizing on linux
-
-    // on linux you set term title with a character
+    // hide cursor
+    printf("\e[?25l");
+    // set title
     printf("\033]0; SNEPK! \007");
 }
 

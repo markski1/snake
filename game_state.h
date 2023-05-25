@@ -33,6 +33,34 @@ void logic_run()
 	snk.prev[0].x = snk.pos.x;
 	snk.prev[0].y = snk.pos.y;
 
+	// check movement buffer
+	if (movement_buffer[0] != MOVE_NONE) {
+		switch(movement_buffer[0]) {
+			case MOVE_UP:
+				if (snk.dir != MOVE_DOWN)
+					snk.dir = MOVE_UP;
+				break;
+			case MOVE_DOWN:
+				if (snk.dir != MOVE_UP)
+					snk.dir = MOVE_DOWN;
+				break;
+			case MOVE_LEFT:
+				if (snk.dir != MOVE_RIGHT)
+					snk.dir = MOVE_LEFT;
+				break;
+			case MOVE_RIGHT:
+				if (snk.dir != MOVE_LEFT)
+					snk.dir = MOVE_RIGHT;
+				break;
+		}
+
+		for (int i = 0; i < KB_BFR_SIZE - 1; ++i) {
+			movement_buffer[i] = movement_buffer[i + 1];
+		}
+
+		movement_buffer[KB_BFR_SIZE - 1] = MOVE_NONE;
+    }
+
 	// move in whichever direction it is we're moving
 	switch (snk.dir)
 	{
@@ -50,8 +78,6 @@ void logic_run()
 			break;
 	}
 	
-	keystroke_unread = false;
-
 	wall_check();
 
 	draw_snake();
@@ -67,8 +93,7 @@ void logic_run()
 	if (food.x == snk.pos.x && food.y == snk.pos.y)
 	{
 		snk.len++;
-		if (snk.len < 15) snk.spe += 2;
-		else if (snk.len < 30) snk.spe += 1;
+		if (snk.len < 50) snk.spe += 1;
 		else snk.spe += rand() % 2;
 		spawn_new_food();
 		update_score();
@@ -193,7 +218,7 @@ void logic_wait()
 
     // if moving vertically slow things down, since vertical characters are higher
     if (snk.dir == MOVE_UP || snk.dir == MOVE_DOWN)
-        wait_amount *= 1.4;
+        wait_amount *= 1.35;
 
 	ms_sleep(wait_amount);
 }

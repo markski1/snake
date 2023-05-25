@@ -1,46 +1,49 @@
 // runs on it's own thread
 void * handle_keystrokes(void *ptr) {
+    
+    int i;
+
+    for (i = 0; i < KB_BFR_SIZE; ++i) {
+        movement_buffer[i] = MOVE_NONE;
+    }
+
     while (true) {
         char input = getch();
 
-        if (keystroke_unread) continue;
+        int entered_move = MOVE_NONE;
         
         switch (input)
         {
-            // on each key, make sure we're not moving the opposite direction.
-            // snake can't do a 180 into itself.
             case 'W':
             case 'w':
-                if (snk.dir != MOVE_DOWN) {
-                    keystroke_unread = true;
-                    snk.dir = MOVE_UP;
-                }
+                entered_move = MOVE_UP;
                 break;
             case 'S':
             case 's':
-                if (snk.dir != MOVE_UP) {
-                    keystroke_unread = true;
-                    snk.dir = MOVE_DOWN;
-                }
+                entered_move = MOVE_DOWN;
                 break;
             case 'A':
             case 'a':
-                if (snk.dir != MOVE_RIGHT) {
-                    keystroke_unread = true;
-                    snk.dir = MOVE_LEFT;
-                }
+                entered_move = MOVE_LEFT;
                 break;
             case 'D':
             case 'd':
-                if (snk.dir != MOVE_LEFT) {
-                    keystroke_unread = true;
-                    snk.dir = MOVE_RIGHT;
-                }
+                entered_move = MOVE_RIGHT;
                 break;
             // escape exits the game.
             case 'O':
             case 'o':
                 game_over = true;
+        }
+
+        if (entered_move == MOVE_NONE)
+            continue;
+
+        for (i = 0; i < KB_BFR_SIZE; ++i) {
+            if (movement_buffer[i] == MOVE_NONE) {
+                movement_buffer[i] = entered_move;
+                break;
+            }
         }
     }
 }

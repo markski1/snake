@@ -10,7 +10,7 @@
 snake  snk;
 coords food;
 bool   game_over = false;
-bool   keystroke_unread = false;
+int    movement_buffer[KB_BFR_SIZE];
 
 #ifdef _WIN32
 #include "platform_specific/win-platform.h"
@@ -34,7 +34,6 @@ void main(int argc, char const *argv[])
 	// set the screensize
 	set_scrsize();
 
-	goto_xy(0, 0);
 	printf("SNEPK!\n\nPress any key to start.\n\nIf running from a terminal, please ensure\nyou have at least %i lines of height.", GAME_HEIGHT);
 
 	getch();
@@ -47,7 +46,6 @@ void main(int argc, char const *argv[])
 		create_game_field();
 		setup_state();
 		game_over = false;
-		keystroke_unread = false;
 
 		// game loop
 		while (!game_over) {
@@ -55,7 +53,6 @@ void main(int argc, char const *argv[])
 		}
 
 		clear_scr();
-		goto_xy(0, 0);
 		printf("Game over! Score: %i\n\n", snk.len - SNAKE_INITIAL_LENGTH);
 		printf("Restarting in 3 seconds..");
 

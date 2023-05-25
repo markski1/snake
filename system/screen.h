@@ -14,6 +14,8 @@ void clear_scr() {
 			printf(" ");
 		}
 	}
+
+	goto_xy(0, 0);
 }
 
 void update_score()
@@ -24,9 +26,6 @@ void update_score()
 
 void create_game_field()
 {
-	// hide cursor
-	printf("\e[?25l");
-
 	// set field color as BLUE
 	printf(ANSI_COLOR_BLUE);
 	clear_scr();

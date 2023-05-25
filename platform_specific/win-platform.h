@@ -7,6 +7,10 @@ void set_scrsize() {
     sprintf(str, "mode %i, %i", GAME_WIDTH + 15, GAME_HEIGHT);
     system(str);
 
+    // hide cursor
+    printf("\e[?25l");
+    
+    // set title
     printf("\033]0; SNEPK! \007");
 }
 
