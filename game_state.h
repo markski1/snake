@@ -93,8 +93,10 @@ void logic_run()
 	if (food.x == snk.pos.x && food.y == snk.pos.y)
 	{
 		snk.len++;
-		if (snk.len < 50) snk.spe += 1;
-		else snk.spe += rand() % 2;
+		if (snk.len < 25) snk.spe += 1;
+		else if (snk.len < 50){
+			if (snk.spe % 2) snk.spe += 1;
+		}
 		spawn_new_food();
 		update_score();
 	}
@@ -153,8 +155,7 @@ void spawn_new_food()
 	while (food_state_invalid());
 
 	// draw the food
-	goto_xy(food.x, food.y);
-	printf(ANSI_COLOR_YELLOW "#" ANSI_COLOR_RESET);
+	print_xy(food.x, food.y, ANSI_COLOR_YELLOW "#" ANSI_COLOR_RESET);
 }
 
 void wall_check() {
@@ -183,28 +184,25 @@ void draw_snake() {
 	}
 
 	// draw the prevous head of the snake as the body
-	goto_xy(snk.prev[0].x, snk.prev[0].y);
-	printf(ANSI_COLOR_GREEN "@" ANSI_COLOR_RESET);
+	print_xy(snk.prev[0].x, snk.prev[0].y, ANSI_COLOR_GREEN "@" ANSI_COLOR_RESET);
 
 	// erase the tail-end of our snake
-	goto_xy(snk.prev[snk.len].x, snk.prev[snk.len].y);
-	printf(" ");
+	print_xy(snk.prev[snk.len].x, snk.prev[snk.len].y, " ");
 
 	// draw the new head of the snake
-	goto_xy(snk.pos.x, snk.pos.y);
 	switch (snk.dir)
 	{
 		case MOVE_UP:
-			printf(ANSI_COLOR_GREEN "^" ANSI_COLOR_RESET);
+			print_xy(snk.pos.x, snk.pos.y, ANSI_COLOR_GREEN "^" ANSI_COLOR_RESET);
 			break;
 		case MOVE_DOWN:
-			printf(ANSI_COLOR_GREEN "v" ANSI_COLOR_RESET);
+			print_xy(snk.pos.x, snk.pos.y, ANSI_COLOR_GREEN "v" ANSI_COLOR_RESET);
 			break;
 		case MOVE_LEFT:
-			printf(ANSI_COLOR_GREEN "<" ANSI_COLOR_RESET);
+			print_xy(snk.pos.x, snk.pos.y, ANSI_COLOR_GREEN "<" ANSI_COLOR_RESET);
 			break;
 		case MOVE_RIGHT:
-			printf(ANSI_COLOR_GREEN ">" ANSI_COLOR_RESET);
+			print_xy(snk.pos.x, snk.pos.y, ANSI_COLOR_GREEN ">" ANSI_COLOR_RESET);
 			break;
 	}
 }

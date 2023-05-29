@@ -1,5 +1,4 @@
-#define BASE_WAIT   100
-
+#define BASE_WAIT   96
 
 #define KB_BFR_SIZE 3
 
@@ -14,7 +13,7 @@
 
 #define CHAR_ESC    27
 
-#define SNAKE_INITIAL_LENGTH 3
+#define SNAKE_INITIAL_LENGTH 4
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
