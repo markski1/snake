@@ -3,220 +3,52 @@ void spawn_new_food();
 void draw_snake();
 void logic_wait();
 void wall_check();
+void setup_state();
+void logic_run();
 
-void setup_state()
-{
-	// Spawn the snake in a random location on the left side of the playing field.
-	snk.pos.x = (rand() % (GAME_WIDTH  / 2)) + 2;
-	snk.pos.y = (rand() % (GAME_HEIGHT - 1)) + 3;
-	snk.len = SNAKE_INITIAL_LENGTH;
-	snk.spe = 1;
-	snk.dir = MOVE_RIGHT;
+#define BASE_WAIT   96
 
-	// move the first couple previous location coords outside the screen
-	for (int i = 0; i <= SNAKE_INITIAL_LENGTH; ++i) {
-		snk.prev[i].x = GAME_WIDTH + 20;
-		snk.prev[i].y = GAME_HEIGHT;
-	}
+#define KB_BFR_SIZE 3
 
-	update_score();
+#define MOVE_NONE   0
+#define MOVE_UP     1
+#define MOVE_DOWN   2
+#define MOVE_LEFT   3
+#define MOVE_RIGHT  4
 
-	spawn_new_food();
-}
+#define GAME_WIDTH  40
+#define GAME_HEIGHT 20
 
-int count = 0;
+#define CHAR_ESC    27
 
-// every "frame", if you will.
-void logic_run()
-{
-	// record the last location of the snake
-	snk.prev[0].x = snk.pos.x;
-	snk.prev[0].y = snk.pos.y;
+#define SNAKE_INITIAL_LENGTH 4
 
-	// check movement buffer
-	if (movement_buffer[0] != MOVE_NONE) {
-		switch(movement_buffer[0]) {
-			case MOVE_UP:
-				if (snk.dir != MOVE_DOWN)
-					snk.dir = MOVE_UP;
-				break;
-			case MOVE_DOWN:
-				if (snk.dir != MOVE_UP)
-					snk.dir = MOVE_DOWN;
-				break;
-			case MOVE_LEFT:
-				if (snk.dir != MOVE_RIGHT)
-					snk.dir = MOVE_LEFT;
-				break;
-			case MOVE_RIGHT:
-				if (snk.dir != MOVE_LEFT)
-					snk.dir = MOVE_RIGHT;
-				break;
-		}
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
-		for (int i = 0; i < KB_BFR_SIZE - 1; ++i) {
-			movement_buffer[i] = movement_buffer[i + 1];
-		}
+typedef struct Snake snake;
+typedef struct Coords coords;
 
-		movement_buffer[KB_BFR_SIZE - 1] = MOVE_NONE;
-	}
+struct Coords {
+	int x;
+	int y;
+};
 
-	// move in whichever direction it is we're moving
-	switch (snk.dir)
-	{
-		case MOVE_UP:
-			snk.pos.y -= 1;
-			break;
-		case MOVE_DOWN:
-			snk.pos.y += 1;
-			break;
-		case MOVE_LEFT:
-			snk.pos.x -= 1;
-			break;
-		case MOVE_RIGHT:
-			snk.pos.x += 1;
-			break;
-	}
-	
-	wall_check();
+struct Snake {
+	coords  pos;       // position
+	coords  prev[GAME_WIDTH*GAME_HEIGHT]; // previous positions
+	int     dir;       // direction
+	int     len;       // length
+	int     spe;       // speed
+};
 
-	draw_snake();
-
-	// if we've moved out of bounds, or ran into ourselves, game over.
-	if (snake_state_invalid())
-	{
-		game_over = true;
-		return;
-	}
-
-	// detect food consumption
-	if (food.x == snk.pos.x && food.y == snk.pos.y)
-	{
-		snk.len++;
-		if (snk.len < 25) snk.spe += 1;
-		else if (snk.len < 50){
-			if (snk.spe % 2) snk.spe += 1;
-		}
-		spawn_new_food();
-		update_score();
-	}
-
-	// move cursor out of the way
-	goto_xy(GAME_WIDTH + 15, GAME_HEIGHT);
-
-	logic_wait();
-}
-
-bool snake_state_invalid()
-{
-	// check collision on self
-	for (int i = snk.len - 1; i >= 0; --i)
-	{
-		if (snk.pos.x == snk.prev[i].x && snk.pos.y == snk.prev[i].y)
-			return true;
-	}
-
-	return false;
-}
-
-bool food_state_invalid()
-{
-	// check food isn't outside the bounds of the game
-	if (food.x <= 1 || food.y <= 1)
-	{
-		return true;
-	}
-	if (food.x >= GAME_WIDTH || food.y >= GAME_HEIGHT)
-	{
-		return true;
-	}
-
-	// check food isn't spawning in the snake's head
-	if (food.x == snk.pos.x && food.y == snk.pos.y)
-		return true;
-
-	// check food isn't spawning in the snake's body
-	for (int i = snk.len; i >= 1; --i) {
-		if (food.x == snk.prev[i].x && food.y == snk.prev[i].y)
-			return true;
-	}
-
-	return false;
-}
-
-void spawn_new_food()
-{
-	// give the food a new position, repeat if it's not in a valid place.
-	do
-	{
-		food.x = (rand() % (GAME_WIDTH - 5))  + 3;
-		food.y = (rand() % (GAME_HEIGHT - 4)) + 3;
-	}
-	while (food_state_invalid());
-
-	// draw the food
-	print_xy(food.x, food.y, ANSI_COLOR_YELLOW "#" ANSI_COLOR_RESET);
-}
-
-void wall_check() {
-	// if the snake pos runs into a wall, move it to the other end.
-	if (snk.pos.x <= 1)
-		snk.pos.x = GAME_WIDTH - 1;
-
-	if (snk.pos.x >= GAME_WIDTH)
-		snk.pos.x = 2;
-
-	if (snk.pos.y <= 1)
-		snk.pos.y = GAME_HEIGHT - 1;
-
-	if (snk.pos.y >= GAME_HEIGHT)
-		snk.pos.y = 2;
-}
-
-void draw_snake() {
-	int i;
-	
-	// shift every previous position one space back, since we're moving
-	for (i = snk.len; i >= 1; --i)
-	{
-		snk.prev[i].x = snk.prev[i-1].x;
-		snk.prev[i].y = snk.prev[i-1].y;
-	}
-
-	// draw the prevous head of the snake as the body
-	print_xy(snk.prev[0].x, snk.prev[0].y, ANSI_COLOR_GREEN "@" ANSI_COLOR_RESET);
-
-	// erase the tail-end of our snake
-	print_xy(snk.prev[snk.len].x, snk.prev[snk.len].y, " ");
-
-	// draw the new head of the snake
-	switch (snk.dir)
-	{
-		case MOVE_UP:
-			print_xy(snk.pos.x, snk.pos.y, ANSI_COLOR_GREEN "^" ANSI_COLOR_RESET);
-			break;
-		case MOVE_DOWN:
-			print_xy(snk.pos.x, snk.pos.y, ANSI_COLOR_GREEN "v" ANSI_COLOR_RESET);
-			break;
-		case MOVE_LEFT:
-			print_xy(snk.pos.x, snk.pos.y, ANSI_COLOR_GREEN "<" ANSI_COLOR_RESET);
-			break;
-		case MOVE_RIGHT:
-			print_xy(snk.pos.x, snk.pos.y, ANSI_COLOR_GREEN ">" ANSI_COLOR_RESET);
-			break;
-	}
-}
-
-// wait a given amount of time, less as the snake becomes longer,
-// and check for keyboard input afterwards. update the snake's behaviour if required.
-void logic_wait()
-{
-	// wait reduced by the snake's speed.
-	long wait_amount = BASE_WAIT - snk.spe;
-
-	// if moving vertically slow things down, since vertical characters are higher
-	if (snk.dir == MOVE_UP || snk.dir == MOVE_DOWN)
-		wait_amount *= 1.35;
-
-	ms_sleep(wait_amount);
-}
+// globals
+snake   snk;
+coords  food;
+bool    game_over = false;
+int     movement_buffer[KB_BFR_SIZE];

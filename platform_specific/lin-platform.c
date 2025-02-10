@@ -4,14 +4,16 @@
 int msleep(long msec);
 char getch();
 
-void set_scrsize() {
+void set_scrsize()
+{
 	// hide cursor
 	printf("\e[?25l");
 	// set title
 	printf("\033]0; SNEPK! \007");
 }
 
-void ms_sleep(int ms) {
+void ms_sleep(int ms)
+{
 	msleep(ms);
 }
 
