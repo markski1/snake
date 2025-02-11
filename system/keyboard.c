@@ -14,9 +14,13 @@ void * handle_keystrokes(void *ptr)
 
 	while (true)
 	{
-		ms_sleep(10);
-		if (game_over) continue;
+		// If the game is over, don't capture getch, that way 'press any key to restart' works in the game over prompt.
+		if (game_over) {
+			ms_sleep(50);
+			continue;
+		}
 
+		// getch "blocks" (or rather, sleeps/waits) this thread here until keystroke, for which the character is stored.
 		char input = getch();
 
 		int entered_move = MOVE_NONE;
