@@ -16,10 +16,9 @@ void clear_scr()
 
 	for (i = 0; i <= GAME_HEIGHT * 2; ++i)
 	{
-		print_xy(0, i, "                                                                                    ");
+		print_xy(0, i, "                                                                                                                                                                        ");
+		ms_sleep(10);
 	}
-
-	ms_sleep(250);
 
 	goto_xy(0, 0);
 }
@@ -51,7 +50,7 @@ void create_game_field()
 	printf(ANSI_COLOR_RESET);
 
 	// and off to the right, a score counter.
-	print_xy(GAME_WIDTH + 3, 5, "Score: ");
+	print_xy(GAME_WIDTH + 3, 5, "Score:  0");
 
 	print_xy(GAME_WIDTH + 5, 2, ANSI_COLOR_CYAN "SNEPK!" ANSI_COLOR_RESET);
 }

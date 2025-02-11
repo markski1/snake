@@ -35,7 +35,11 @@ void main(int argc, char const *argv[])
 	// set the screensize
 	set_scrsize();
 
-	printf("SNEPK!\n\nPress any key to start.\n\nIf running from a terminal, please ensure\nyou have at least %i lines of height.", GAME_HEIGHT);
+	printf("SNEPK!");
+	printf("\n\n");
+	printf("Press any key to start.");
+	printf("\n\n");
+	printf("Controls: Arrows, WASD. Press 'o' to exit.");
 
 	getch();
 
@@ -60,6 +64,8 @@ void main(int argc, char const *argv[])
 		clear_scr();
 		printf("Game over! Score: %i\n\n", snk.len - SNAKE_INITIAL_LENGTH);
 		printf("Push any key to restart.");
+
+		ms_sleep(200);
 
 		getch();
 	}
