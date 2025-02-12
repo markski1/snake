@@ -1,4 +1,3 @@
-// all the code here is Windows specific
 #include <synchapi.h>
 #include <conio.h>
 

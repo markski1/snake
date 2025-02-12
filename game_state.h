@@ -17,7 +17,13 @@ void logic_run();
 #define MOVE_RIGHT  4
 
 #define GAME_WIDTH  40
-#define GAME_HEIGHT 20
+#define GAME_HEIGHT 25
+
+// Characters received for arrows by getch()
+#define ARROW_UP    'H'
+#define ARROW_DOWN  'P'
+#define ARROW_LEFT  'K'
+#define ARROW_RIGHT 'M'
 
 #define CHAR_ESC    27
 

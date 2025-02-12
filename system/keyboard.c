@@ -27,24 +27,20 @@ void * handle_keystrokes(void *ptr)
 
 		switch (input)
 		{
-			/*
-				Oddity: In testing, arrow keys equivalent to WASD were detected by getch as 'HKPM'.
-				So that's what each 3 case for each direction is: WASD accounting for caps and normal, and then arrow.
-			*/
 			case 'W': case 'w':
-			case 'H':
+			case ARROW_UP:
 				entered_move = MOVE_UP;
 				break;
 			case 'S': case 's':
-			case 'P':
+			case ARROW_DOWN:
 				entered_move = MOVE_DOWN;
 				break;
 			case 'A': case 'a':
-			case 'K':
+			case ARROW_LEFT:
 				entered_move = MOVE_LEFT;
 				break;
 			case 'D': case 'd':
-			case 'M':
+			case ARROW_RIGHT:
 				entered_move = MOVE_RIGHT;
 				break;
 			case 'O':
